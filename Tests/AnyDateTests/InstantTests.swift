@@ -3,7 +3,7 @@ import Foundation
 import AnyDate
 
 class InstantTests: XCTestCase {
-
+    
     func testPropertySetter() {
         var zero = Instant.epoch
         zero.second = 100
@@ -121,7 +121,7 @@ class InstantTests: XCTestCase {
     func testUntil() {
         let instant1 = Instant(epochSecond: 100_000, nano: 999_000_000)
         let zero = Instant(epochSecond: 0, nano: 0)
-
+        
         XCTAssertEqual(zero.until(endInstant: instant1, component: .nanosecond), 100_000_999_000_000)
         XCTAssertEqual(zero.until(endInstant: instant1, component: .second), 100_000)
         XCTAssertEqual(zero.until(endInstant: instant1, component: .minute), 1666)
@@ -154,11 +154,11 @@ class InstantTests: XCTestCase {
     func testAddDate() {
         var oldInstant = Instant(epochSecond: 306, nano: 124_233_521)
         let addInstant = Instant(epochSecond: 10, nano: 100)
-
+        
         let newInstant = oldInstant + addInstant
         XCTAssertEqual(newInstant.second, 316)
         XCTAssertEqual(newInstant.nano, 124_233_621)
-
+        
         oldInstant += addInstant
         XCTAssertEqual(oldInstant.second, 316)
         XCTAssertEqual(oldInstant.nano, 124_233_621)
@@ -166,18 +166,18 @@ class InstantTests: XCTestCase {
     func testSubtractDate() {
         var oldInstant = Instant(epochSecond: 306, nano: 124_233_521)
         let addInstant = Instant(epochSecond: 10, nano: 100)
-
+        
         let newInstant = oldInstant - addInstant
         XCTAssertEqual(newInstant.second, 296)
         XCTAssertEqual(newInstant.nano, 124_233_421)
-
+        
         oldInstant -= addInstant
         XCTAssertEqual(oldInstant.second, 296)
         XCTAssertEqual(oldInstant.nano, 124_233_421)
     }
     func testHashable() {
         let instant = Instant(epochSecond: 100_000, nano: 999_000_000)
-
+        
         #if swift(>=4.2)
         var hasher = Hasher()
         hasher.combine(100_000)
@@ -208,7 +208,7 @@ class InstantTests: XCTestCase {
     }
     func testMirror() {
         let instant = Instant(epochSecond: 100_000, nano: 999_000_000)
-
+        
         var checkList: [String: Any] = [
             "second": Int64(100_000),
             "nano": 999_000_000

@@ -69,7 +69,7 @@ public struct Period {
         total += Int64(minute) * LocalTime.Constant.nanosPerMinute
         total += Int64(second) * LocalTime.Constant.nanosPerSecond
         total += Int64(nano)
-        
+
         let dayAppend: Int
         if total < 0 {
             dayAppend = Int(total / LocalTime.Constant.nanosPerDay) - 1
@@ -78,27 +78,27 @@ public struct Period {
             dayAppend = Int(total / LocalTime.Constant.nanosPerDay)
             total %= LocalTime.Constant.nanosPerDay
         }
-        
+
         self.internalNano = Int(total % LocalTime.Constant.nanosPerSecond)
         total /= LocalTime.Constant.nanosPerSecond
-        
+
         self.internalSecond = Int(total % Int64(LocalTime.Constant.secondsPerMinute))
         total /= Int64(LocalTime.Constant.secondsPerMinute)
-        
+
         self.internalMinute = Int(total % Int64(LocalTime.Constant.minutesPerHour))
         self.internalHour = Int(total / Int64(LocalTime.Constant.minutesPerHour))
 
         let days = day + dayAppend
 
-        var newDate = LocalDate(year: year, month: month + 1, day: days + 1)
+        let newDate = LocalDate(year: year, month: month + 1, day: days + 1)
         self.internalYear = newDate.year
         self.internalMonth = newDate.month - 1
         self.internalDay = newDate.day - 1
     }
 
-    
+
     // MARK: - Operator
-    
+
     /// Period
     static public func + (lhs: Period, rhs: Period) -> Period {
         return Period(
@@ -140,7 +140,7 @@ public struct Period {
         lhs.second -= rhs.second
         lhs.nano -= rhs.nano
     }
-    
+
     /// LocalDateTime
     static public func + (lhs: LocalDateTime, rhs: Period) -> LocalDateTime {
         return LocalDateTime(
@@ -182,7 +182,7 @@ public struct Period {
         lhs.second -= rhs.second
         lhs.nano -= rhs.nano
     }
-    
+
     /// ZonedDateTime
     static public func + (lhs: ZonedDateTime, rhs: Period) -> ZonedDateTime {
         return ZonedDateTime(
@@ -226,8 +226,8 @@ public struct Period {
         lhs.second -= rhs.second
         lhs.nano -= rhs.nano
     }
-    
-    
+
+
     // MARK: - Lifecycle
 
     /// Creates an instance of LocalDateTime from year, month,
@@ -245,7 +245,7 @@ public struct Period {
 }
 
 extension Period: Comparable {
-    
+
     /// Returns a Boolean value indicating whether the value of the first
     /// argument is less than that of the second argument.
     public static func <(lhs: Period, rhs: Period) -> Bool {
@@ -257,7 +257,7 @@ extension Period: Comparable {
         guard lhs.second == rhs.second else { return lhs.second < rhs.second }
         return lhs.nano < rhs.nano
     }
-    
+
     /// Returns a Boolean value indicating whether the value of the first
     /// argument is greater than that of the second argument.
     public static func >(lhs: Period, rhs: Period) -> Bool {
@@ -269,22 +269,22 @@ extension Period: Comparable {
         guard lhs.second == rhs.second else { return lhs.second > rhs.second }
         return lhs.nano > rhs.nano
     }
-    
+
     /// Returns a Boolean value indicating whether the value of the first
     /// argument is less than or equal to that of the second argument.
     public static func <=(lhs: Period, rhs: Period) -> Bool {
         return !(lhs > rhs)
     }
-    
+
     /// Returns a Boolean value indicating whether the value of the first
     /// argument is greater than or equal to that of the second argument.
     public static func >=(lhs: Period, rhs: Period) -> Bool {
         return !(lhs < rhs)
     }
-    
+
 }
 extension Period: Hashable {
-    
+
 #if swift(>=4.2)
     /// Hashes the essential components of this value by feeding them into the
     /// given hasher.
@@ -321,7 +321,7 @@ extension Period: Hashable {
 #endif
 }
 extension Period: Equatable {
-    
+
     /// Returns a Boolean value indicating whether two values are equal.
     public static func ==(lhs: Period, rhs: Period) -> Bool {
         guard lhs.year == rhs.year else { return false }
@@ -333,10 +333,10 @@ extension Period: Equatable {
         guard lhs.nano == rhs.nano else { return false }
         return true
     }
-    
+
 }
 extension Period: CustomStringConvertible, CustomDebugStringConvertible {
-    
+
     /// A textual representation of this instance.
     public var description: String {
         let list: [String?] = [
@@ -347,7 +347,7 @@ extension Period: CustomStringConvertible, CustomDebugStringConvertible {
             self.internalMinute != 0 ? String(format: "%02dMin ", self.internalMinute) : nil,
             self.internalSecond != 0 || self.internalNano != 0 ? String(format: "%02d.%09dSec", self.internalSecond, self.internalNano) : nil
         ]
-        
+
         #if swift(>=4.1)
         return list
             .compactMap { $0 }
@@ -358,12 +358,12 @@ extension Period: CustomStringConvertible, CustomDebugStringConvertible {
             .joined()
         #endif
     }
-    
+
     /// A textual representation of this instance, suitable for debugging.
     public var debugDescription: String {
         return description
     }
-    
+
 }
 extension Period: CustomReflectable {
 
@@ -386,7 +386,7 @@ extension Period: CustomReflectable {
 }
 #if swift(>=4.1) || (swift(>=3.3) && !swift(>=4.0))
 extension Period: CustomPlaygroundDisplayConvertible {
-    
+
     /// Returns the custom playground description for this instance.
     ///
     /// If this type has value semantics, the instance returned should be
@@ -394,7 +394,7 @@ extension Period: CustomPlaygroundDisplayConvertible {
     public var playgroundDescription: Any {
         return self.description
     }
-    
+
 }
 #else
 extension Period: CustomPlaygroundQuickLookable {

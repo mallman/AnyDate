@@ -15,7 +15,7 @@ class ZonedDateTimeTests: XCTestCase {
         min.minute = 2
         min.second = -12
         min.nano = -125_221
-        
+
         XCTAssertEqual(min.year, 100)
         XCTAssertEqual(min.month, 1)
         XCTAssertEqual(min.day, 19)
@@ -161,7 +161,7 @@ class ZonedDateTimeTests: XCTestCase {
 
         let date = Date()
 
-        let localDate1 = ZonedDateTime(timeZone: utcCalendar.timeZone)
+        let localDate1 = ZonedDateTime(date, timeZone: utcCalendar.timeZone)
         let localDate2 = ZonedDateTime(date, timeZone: utcCalendar.timeZone)
         XCTAssertEqual(localDate2.year, utcCalendar.component(.year, from: date))
         XCTAssertEqual(localDate2.month, utcCalendar.component(.month, from: date))
@@ -359,12 +359,12 @@ class ZonedDateTimeTests: XCTestCase {
         dateFormatter1.dateFormat = "yyyy--MM-dd...HH.mm.ss.SSSZZZZZ"
         let date2 = ZonedDateTime.parse("2014--11-12...12.44.52.123+00:00", formatter: dateFormatter1, timeZone: self.utcTimeZone)
         XCTAssertEqual(date1, date2)
-        
+
         let dateFormatter2 = DateFormatter()
         dateFormatter2.dateFormat = "yyyy--sadgasdgasdg"
         let date3 = ZonedDateTime.parse("2014--11-12...12.44.52.123+00:00", formatter: dateFormatter2, timeZone: self.utcTimeZone)
         XCTAssertEqual(date3, nil)
-        
+
         let date4 = ZonedDateTime.parse("2014sadg", timeZone: self.utcTimeZone)
         XCTAssertEqual(date4, nil)
     }
@@ -379,10 +379,10 @@ class ZonedDateTimeTests: XCTestCase {
         XCTAssertEqual(newDate.minute, 59)
         XCTAssertEqual(newDate.second, 18)
         XCTAssertEqual(newDate.nano, 1573)
-        
+
         oldDate += addDate
         XCTAssertEqual(oldDate, newDate)
-        
+
         newDate = oldDate + addDate.localDateTime
         XCTAssertEqual(newDate.year, 1000)
         XCTAssertEqual(newDate.month, 3)
@@ -391,10 +391,10 @@ class ZonedDateTimeTests: XCTestCase {
         XCTAssertEqual(newDate.minute, 7)
         XCTAssertEqual(newDate.second, 18)
         XCTAssertEqual(newDate.nano, 1573)
-        
+
         oldDate += addDate.localDateTime
         XCTAssertEqual(oldDate, newDate)
-        
+
         newDate = oldDate + addDate.localDate
         XCTAssertEqual(newDate.year, 1000)
         XCTAssertEqual(newDate.month, 4)
@@ -403,10 +403,10 @@ class ZonedDateTimeTests: XCTestCase {
         XCTAssertEqual(newDate.minute, 7)
         XCTAssertEqual(newDate.second, 18)
         XCTAssertEqual(newDate.nano, 1573)
-        
+
         oldDate += addDate.localDate
         XCTAssertEqual(oldDate, newDate)
-        
+
         newDate = oldDate + addDate.localTime
         XCTAssertEqual(newDate.year, 1000)
         XCTAssertEqual(newDate.month, 4)
@@ -415,7 +415,7 @@ class ZonedDateTimeTests: XCTestCase {
         XCTAssertEqual(newDate.minute, 15)
         XCTAssertEqual(newDate.second, 18)
         XCTAssertEqual(newDate.nano, 1573)
-        
+
         oldDate += addDate.localTime
         XCTAssertEqual(oldDate, newDate)
     }
@@ -430,10 +430,10 @@ class ZonedDateTimeTests: XCTestCase {
         XCTAssertEqual(newDate.minute, 43)
         XCTAssertEqual(newDate.second, 18)
         XCTAssertEqual(newDate.nano, 1573)
-        
+
         oldDate -= addDate
         XCTAssertEqual(oldDate, newDate)
-        
+
         newDate = oldDate - addDate.localDateTime
         XCTAssertEqual(newDate.year, 999)
         XCTAssertEqual(newDate.month, 11)
@@ -442,10 +442,10 @@ class ZonedDateTimeTests: XCTestCase {
         XCTAssertEqual(newDate.minute, 35)
         XCTAssertEqual(newDate.second, 18)
         XCTAssertEqual(newDate.nano, 1573)
-        
+
         oldDate -= addDate.localDateTime
         XCTAssertEqual(oldDate, newDate)
-        
+
         newDate = oldDate - addDate.localDate
         XCTAssertEqual(newDate.year, 999)
         XCTAssertEqual(newDate.month, 9)
@@ -454,10 +454,10 @@ class ZonedDateTimeTests: XCTestCase {
         XCTAssertEqual(newDate.minute, 35)
         XCTAssertEqual(newDate.second, 18)
         XCTAssertEqual(newDate.nano, 1573)
-        
+
         oldDate -= addDate.localDate
         XCTAssertEqual(oldDate, newDate)
-        
+
         newDate = oldDate - addDate.localTime
         XCTAssertEqual(newDate.year, 999)
         XCTAssertEqual(newDate.month, 9)
@@ -466,7 +466,7 @@ class ZonedDateTimeTests: XCTestCase {
         XCTAssertEqual(newDate.minute, 27)
         XCTAssertEqual(newDate.second, 18)
         XCTAssertEqual(newDate.nano, 1573)
-        
+
         oldDate -= addDate.localTime
         XCTAssertEqual(oldDate, newDate)
     }
@@ -488,7 +488,7 @@ class ZonedDateTimeTests: XCTestCase {
     }
     func testHashable() {
         let date = ZonedDateTime(year: 1999, month: 10, day: 31, hour: 11, minute: 51, second: 18, nanoOfSecond: 153_000_000, clock: .UTC)
-        
+
         #if swift(>=4.2)
         var hasher = Hasher()
         hasher.combine(date.clock)
@@ -519,7 +519,7 @@ class ZonedDateTimeTests: XCTestCase {
     }
     func testMirror() {
         let date = ZonedDateTime(year: 1999, month: 10, day: 31, hour: 11, minute: 51, second: 18, nanoOfSecond: 153_000_000, clock: .UTC)
-        
+
         var checkList: [String: Any] = [
             "year": 1999,
             "month": 10,
